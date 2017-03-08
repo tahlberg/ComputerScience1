@@ -1,0 +1,37 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+void RollDice(int rollTimes);
+void FallingDistance(int fallTime);
+void ReportVolume(string objectName, double objectRadius);
+void TriviaGuess();
+double Diagonal(double screenWidth, double screenHeight);
+double CoinFlip(int numFlip);
+string GetMenuChoice(string choice1, string choice2, string choice3);
+
+int main()
+{
+    
+    return 0;
+}
+void RollDice(int rollTimes)
+{
+    int rollTotal;
+    rand(time(0));
+    for(int i = 0; i < rollTimes; i++)
+    {
+        int roll = rand()%20+1;
+        cout << roll << endl;
+        rollTotal += roll;
+    }
+    cout << rollTotal << endl;
+}
+void FallingDistance(int fallTime)
+{
+    
+}
