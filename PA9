@@ -1,13 +1,67 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
 void PlayTicTacToe();
+void TakeQuiz();
 
 int main()
 {
+    TakeQuiz();
     PlayTicTacToe();
     return 0;
+}
+
+void TakeQuiz()
+{
+    string fName;
+    cout << "What is the name of the file?" << endl;
+    cin >> fName;
+    ifstream fin;
+    fin.open(fName.c_str());
+    if (fin.fail() == true)
+    {
+        cout << "Failed to open file." << endl;
+    }
+    else
+    {
+        string text;
+        int numCorr;
+        string uAnswer;
+        int n = 1;
+        do
+        {
+            for(int i = 0; i < n; i++)
+            {
+                getline(fin, text);
+            }
+            if(n%2 == 1)
+            {
+                cout << text << endl;
+            }
+            else
+            {
+                if(n%2 == 0)
+                {
+                    cout << text << endl;
+                    getline(cin, uAnswer);
+                    if(uAnswer == text)
+                    {
+                        cout << "Correct!" << endl;
+                        numCorr++;
+                    }
+                    else
+                    {
+                        cout << "Incorrect!" << endl;
+                    }
+                }
+            }
+            n++;
+        }
+        while(fin.eof() == false);
+        fin.close();
+    }
 }
 
 void PlayTicTacToe()
@@ -39,14 +93,14 @@ void PlayTicTacToe()
         cin >> inRow;
         while(inRow > 3 || inRow < 1)
         {
-            cout << "Not a valid Row" << endl;
+            cout << "That is not on the board" << endl;
             cin >> inRow;
         }
         cout << "What column" << endl;
         cin >> inCol;
         while(inCol > 3 || inRow < 1)
         {
-            cout << "Not a valid column" << endl;
+            cout << "That is not on the board" << endl;
             cin >> inRow;
         }
         inRow--;
