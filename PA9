@@ -27,17 +27,15 @@ void TakeQuiz()
     else
     {
         string text;
-        int numCorr;
+        double numCorr = 0.0;
+        double numQ = 0.0;
         string uAnswer;
-        int n = 1;
+        cin.ignore(32768, '\n');
         do
         {
-            for(int i = 0; i < n; i++)
-            {
-                getline(fin, text);
-            }
+            numQ++;
+            getline(fin, text);
             cout << text << endl;
-            cin.ignore(32768, '\n');
             getline(fin, text);
             getline(cin, uAnswer);
             if(uAnswer == text)
@@ -49,10 +47,12 @@ void TakeQuiz()
             {
                 cout << "Incorrect!" << endl;
             }
-            n++;
         }
         while(fin.eof() == false);
         fin.close();
+
+        cout << "You got: " << numCorr << "/" << numQ << " correct" << endl;
+        cout << "Percent correct: " << numCorr/numQ << endl;
     }
 }
 
