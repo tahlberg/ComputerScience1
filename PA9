@@ -1,0 +1,91 @@
+#include <iostream>
+
+using namespace std;
+
+void PlayTicTacToe();
+
+int main()
+{
+    PlayTicTacToe();
+    return 0;
+}
+
+void PlayTicTacToe()
+{
+    const int SIZE = 3;
+    char squares[SIZE][SIZE] =
+        {
+            {' ', ' ', ' '},
+            {' ', ' ', ' '},
+            {' ', ' ', ' '}
+        };
+    int inRow;
+    int inCol;
+    char whoseTurn = 'X';
+    for(int numTurns = 0; numTurns < 9; numTurns++)
+    {
+        cout << "===Player " << whoseTurn << "===" << endl;
+        cout << endl;
+        for(int i =0; i < SIZE; i++)
+        {
+            for(int n = 0; n < SIZE; n++)
+            {
+                cout << squares[i][n];
+            }
+            cout << endl;
+        }
+        cout << endl;
+        cout << "What row?" << endl;
+        cin >> inRow;
+        while(inRow > 3 || inRow < 1)
+        {
+            cout << "Not a valid Row" << endl;
+            cin >> inRow;
+        }
+        cout << "What column" << endl;
+        cin >> inCol;
+        while(inCol > 3 || inRow < 1)
+        {
+            cout << "Not a valid column" << endl;
+            cin >> inRow;
+        }
+        inRow--;
+        inCol--;
+        while(squares[inRow][inCol] == 'X' || squares[inRow][inCol] == 'O')
+        {
+            cout << "That space is already taken!" << endl;
+            cout << "What row?" << endl;
+            cin >> inRow;
+            while(inRow > 3 || inRow < 1)
+            {
+                cout << "Not a valid Row" << endl;
+                cin >> inRow;
+            }
+            cout << "What column" << endl;
+            cin >> inCol;
+            while(inCol > 3 || inRow < 1)
+            {
+                cout << "Not a valid column" << endl;
+                cin >> inRow;
+            }
+        }
+        squares[inRow][inCol] = whoseTurn;
+        if(whoseTurn == 'X')
+        {
+            whoseTurn = 'O';
+        }
+        else
+        {
+            whoseTurn = 'X';
+        }
+    }
+    cout << "===Game Over===" << endl;
+    for(int i = 0; i < SIZE; i++)
+    {
+        for(int n = 0; n < SIZE; n++)
+        {
+            cout << squares[i][n];
+        }
+        cout << endl;
+    }
+}
