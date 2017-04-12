@@ -52,7 +52,7 @@ void TakeQuiz()
         fin.close();
 
         cout << "You got: " << numCorr << "/" << numQ << " correct" << endl;
-        cout << "Percent correct: " << numCorr/numQ << endl;
+        cout << "Percent correct: " << numCorr/numQ << "%" << endl;
     }
 }
 
