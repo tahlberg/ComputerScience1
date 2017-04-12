@@ -36,10 +36,6 @@ void TakeQuiz()
             {
                 getline(fin, text);
             }
-            for(int i = 0; i < n; i++)
-            {
-                getline(fin, text);
-            }
             cout << text << endl;
             cin.ignore(32768, '\n');
             getline(fin, text);
