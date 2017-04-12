@@ -36,26 +36,22 @@ void TakeQuiz()
             {
                 getline(fin, text);
             }
-            if(n%2 == 1)
+            for(int i = 0; i < n; i++)
             {
-                cout << text << endl;
+                getline(fin, text);
+            }
+            cout << text << endl;
+            cin.ignore(32768, '\n');
+            getline(fin, text);
+            getline(cin, uAnswer);
+            if(uAnswer == text)
+            {
+                cout << "Correct!" << endl;
+                numCorr++;
             }
             else
             {
-                if(n%2 == 0)
-                {
-                    cout << text << endl;
-                    getline(cin, uAnswer);
-                    if(uAnswer == text)
-                    {
-                        cout << "Correct!" << endl;
-                        numCorr++;
-                    }
-                    else
-                    {
-                        cout << "Incorrect!" << endl;
-                    }
-                }
+                cout << "Incorrect!" << endl;
             }
             n++;
         }
