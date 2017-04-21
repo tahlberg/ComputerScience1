@@ -1,0 +1,62 @@
+#include <iostream>
+#include "lpcgraphics.h"
+#include <cmath>
+using namespace std;
+
+void Button(GraphicsWindow & win, string str, int x, int y, int w, int h, Color c, bool & buttonPress);
+void DrawButton(GraphicsWindow & win, string str, int x, int y, int w, int h, Color c, bool mouseHover);
+
+int main()
+{
+    string str = "Test";
+    bool hitButton = false;
+    GraphicsWindow mainWindow(800, 600, "Demo");
+    while(hitButton == false)
+    {
+        Button(mainWindow, str, 400, 300, 100, 50, Color(0, 255, 0), hitButton);
+    }
+    mainWindow.DrawCircle(400, 300, 100, Color(255, 0, 0), true);
+    mainWindow.Refresh();
+    mainWindow.WaitForKeyPress();
+    mainWindow.Refresh();
+
+}
+
+void Button(GraphicsWindow & win, string str, int x, int y, int w, int h, Color c, bool & buttonPress)
+{
+    bool mouseHover = false;
+    DrawButton(win, str, x, y, w, h, c, mouseHover);
+    win.Refresh();
+    while(buttonPress == false)
+    {
+            while(win.MouseX() >= x && win.MouseX() <= x+w && win.MouseY() >= y && win.MouseY() <= y+h)
+            {
+                mouseHover = true;
+                DrawButton(win, str, x, y, w, h, c, mouseHover);
+                win.Refresh();
+                while(win.MouseIsDown() == true)
+                {
+                    buttonPress = true;
+                }
+            }
+            if(buttonPress == true)
+            {
+                break;
+            }
+            mouseHover = false;
+            DrawButton(win, str, x, y, w, h, c, mouseHover);
+            win.Refresh();
+    }
+}
+
+void DrawButton(GraphicsWindow & win, string str, int x, int y, int w, int h, Color c, bool mouseHover)
+{
+    Color blue(0, 0, 255);
+    if(mouseHover == true)
+    {
+        c = blue;
+    }
+    win.DrawRectangle(x, y, w, h, c, false);
+    win.DrawString(str, x, y, c, sqrt(w)+w/2);
+    win.Refresh();
+}
