@@ -1,0 +1,114 @@
+#include <iostream>
+#include "lpcgraphics.h"
+using namespace std;
+
+///Structs
+
+struct Student
+{
+    string name;
+    int idnum;
+    double quizAverage;
+    char grade;
+};
+
+///Tasks
+void Task1();
+
+//Task 1
+void GetStudentData(Student & s);
+void ReturnStudentData(Student s, int ID);
+
+int main()
+{
+    int mChoice;
+    cout << "Please select a task:" << endl;
+    cout << "1. Task 1" << endl;
+    cout << "2. Task 2" << endl;
+    cout << "2. Task 3" << endl;
+    cin >> mChoice;
+    switch(mChoice)
+    {
+    case 1:
+        Task1();
+        break;
+    }
+
+}
+
+void Task1()
+{
+    vector<Student> students;
+    int numStudent;
+    int sID;
+    cout << "How many students are there?" << endl;
+    cin >> numStudent;
+    cin.ignore(32768, '\n');
+    for(int i = 0; i < numStudent; i++)
+    {
+        Student stud;
+        GetStudentData(stud);
+        cin.ignore(32768, '\n');
+        students.push_back(stud);
+    }
+    cout << "Please enter a student ID. Enter -1 to stop." << endl;
+    cin >> sID;
+    while(sID != -1)
+    {
+        for(int i = 0; i < students.size(); i++)
+        {
+            ReturnStudentData(students[i], sID);
+        }
+    }
+}
+
+void GetStudentData(Student & s)
+{
+    double scores[5];
+    double sTotal = 0.0;
+    cout << "Student Name: ";
+    getline(cin, s.name);
+    cout << "Student ID: ";
+    cin >> s.idnum;
+    for(int i = 0; i < 5; i++)
+    {
+        cout << "Quiz " << i+1 << ": ";
+        cin >> scores[i];
+        sTotal += scores[i];
+    }
+    s.quizAverage = (sTotal / 5.0);
+    if(s.quizAverage >= 90)
+    {
+        s.grade = 'A';
+    }
+    else if(s.quizAverage >= 80)
+    {
+        s.grade = 'B';
+    }
+    else if(s.quizAverage >= 70)
+    {
+        s.grade = 'C';
+    }
+    else if(s.quizAverage >= 60)
+    {
+        s.grade = 'D';
+    }
+    else
+    {
+        s.grade = 'F';
+    }
+}
+
+void ReturnStudentData(Student s, int ID)
+{
+    if(s.idnum == ID)
+    {
+        cout << left << setw(15) << "Name: " << s.name << endl;
+        cout << left << setw(15) << "Quiz Average: " << s.quizAverage << endl;
+        cout << left << setw(15) << "Grade: " << s.grade << endl;
+    }
+    else
+    {
+        cout << "Not found" << endl;
+    }
+}
