@@ -1,5 +1,9 @@
 #include <iostream>
 #include "lpcgraphics.h"
+#include <ctime>
+#include <cstdlib>
+#include <vector>
+#include <cmath>
 using namespace std;
 
 ///Structs
@@ -14,26 +18,58 @@ struct Student
 
 ///Tasks
 void Task1();
+void Task2();
+void Task3();
 
 //Task 1
 void GetStudentData(Student & s);
 void ReturnStudentData(Student s, int ID);
 
+//Task 2
+struct Bunny
+{
+    int x;
+    int y;
+    int s;
+};
+void SetupBunny(Bunny & b, GraphicsWindow w);
+void MoveBunny(Bunny & b);
+
+//Task 3
+struct Planet
+{
+    int x;
+    int y;
+    int r;
+    Color c;
+};
+void SetupPlanet(Planet & p);
+void DrawPlanet(Planet p, GraphicsWindow & w);
+double Distance(int x1, int y1, int x2, int y2);
+
 int main()
 {
     int mChoice;
-    cout << "Please select a task:" << endl;
-    cout << "1. Task 1" << endl;
-    cout << "2. Task 2" << endl;
-    cout << "2. Task 3" << endl;
-    cin >> mChoice;
-    switch(mChoice)
+    while(true)
     {
-    case 1:
-        Task1();
-        break;
+        cout << "Please select a task:" << endl;
+        cout << "1. Task 1" << endl;
+        cout << "2. Task 2" << endl;
+        cout << "2. Task 3" << endl;
+        cin >> mChoice;
+        switch(mChoice)
+        {
+        case 1:
+            Task1();
+            break;
+        case 2:
+            Task2();
+            break;
+        case 3:
+            Task3();
+            break;
+        }
     }
-
 }
 
 void Task1()
@@ -58,9 +94,9 @@ void Task1()
         for(int i = 0; i < students.size(); i++)
         {
             ReturnStudentData(students[i], sID);
+            cout << "Please enter a student iD: " << endl;
+            cin >> sID;
         }
-        cout << "Please enter a student ID:" << endl;
-        cin >> sID;
     }
 }
 
@@ -77,11 +113,6 @@ void GetStudentData(Student & s)
         cout << "Quiz " << i+1 << ": ";
         cin >> scores[i];
         sTotal += scores[i];
-        while(scores[i] < 0 || scores[i] > 100)
-        {
-        cout << "Invalid score. Please enter percentage 0 - 100." << endl;
-        cin >> scores[i];
-        }
     }
     s.quizAverage = (sTotal / 5.0);
     if(s.quizAverage >= 90)
@@ -118,4 +149,115 @@ void ReturnStudentData(Student s, int ID)
     {
         cout << "Not found" << endl;
     }
+}
+
+void Task2()
+{
+    srand(time(0));
+    vector<Bunny> bunnies;
+    GraphicsWindow win(800, 600, "Bunnies!");
+    bool mouseWasDown = false;
+    while(win.KeyPressed("Q") == false && win.KeyPressed("q") == false)
+    {
+        if(mouseWasDown == false && win.MouseIsDown() == true)
+        {
+            cout << "part 1" << endl;
+            Bunny newBunny;
+            SetupBunny(newBunny, win);
+            bunnies.push_back(newBunny);
+            mouseWasDown = true;
+        }
+        for(int i = 0; i < bunnies.size(); i++)
+        {
+            cout << "Part 2." << i << endl;
+            win.DrawRectangle(bunnies[i].x, bunnies[i].y, 50, 50, Color(0, 0, 0), true);
+            win.Refresh();
+        }
+        for(int n = 0; n < bunnies.size(); n++)
+        {
+            cout << "Part 3." << n << endl;
+            MoveBunny(bunnies[n]);
+        }
+        for(int t = 0; t < bunnies.size(); t++)
+        {
+            cout << "Part 4." << t << endl;
+            win.DrawImage("bunny.bmp", bunnies[t].x, bunnies[t].y, 50, 50);
+            cout << "Draw success" << endl;
+            win.Refresh();
+            cout << "Render success" << endl;
+        }
+        cout << "Part 5" << endl;
+        win.Refresh();
+        win.Pause(0.1);
+    }
+}
+
+void SetupBunny(Bunny & b, GraphicsWindow w)
+{
+    b.x = w.MouseX();
+    b.y = w.MouseY();
+    b.s = rand()%20+1;
+}
+
+void MoveBunny(Bunny & b)
+{
+    b.y += b.s;
+    if(b.y > 600 || b.y < 0)
+    {
+        b.y *= -1;
+    }
+}
+
+void Task3()
+{
+    Planet planets[10];
+    int pClicked;
+    GraphicsWindow win(800, 600, "SPAAAAAAAAAAAAAAAAAAACE!");
+    srand(time(0));
+    for(int i = 0; i < 10; i++)
+    {
+        SetupPlanet(planets[i]);
+    }
+    while(pClicked < 10)
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            DrawPlanet(planets[i], win);
+            win.Refresh();
+        }
+        win.WaitForMouseUp();
+        win.WaitForMouseDown();
+        for(int i = 0; i < 10; i++)
+        {
+            if(Distance(win.MouseX(), win.MouseY(), planets[i].x, planets[i].y) < planets[i].r)
+            {
+                planets[i].c = Color(0, 0, 0);
+                DrawPlanet(planets[i], win);
+                planets[i].r = 0;
+                win.Refresh();
+                pClicked++;
+            }
+        }
+    }
+    win.DrawString("LEVEL COMPLETE", 200, 300, Color(255, 255, 255), 48);
+    win.Refresh();
+    win.WaitForKeyPress();
+}
+
+void SetupPlanet(Planet & p)
+{
+    p.x = rand()%800;
+    p.y = rand()%600;
+    p.r = rand()%50+30;
+    p.c = Color(rand()%256, rand()%256, rand()%256);
+}
+
+void DrawPlanet(Planet p, GraphicsWindow & w)
+{
+    w.DrawCircle(p.x, p.y, p.r, p.c, true);
+}
+
+double Distance(int x1, int y1, int x2, int y2)
+{
+    return (sqrt(pow(x1-x2, 2.0) + pow(y1-y2, 2.0)));
 }
