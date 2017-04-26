@@ -59,6 +59,8 @@ void Task1()
         {
             ReturnStudentData(students[i], sID);
         }
+        cout << "Please enter a student ID:" << endl;
+        cin >> sID;
     }
 }
 
@@ -75,6 +77,11 @@ void GetStudentData(Student & s)
         cout << "Quiz " << i+1 << ": ";
         cin >> scores[i];
         sTotal += scores[i];
+        while(scores[i] < 0 || scores[i] > 100)
+        {
+        cout << "Invalid score. Please enter percentage 0 - 100."
+        cin >> scores[i];
+        }
     }
     s.quizAverage = (sTotal / 5.0);
     if(s.quizAverage >= 90)
