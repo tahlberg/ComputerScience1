@@ -161,32 +161,23 @@ void Task2()
     {
         if(mouseWasDown == false && win.MouseIsDown() == true)
         {
-            cout << "part 1" << endl;
             Bunny newBunny;
             SetupBunny(newBunny, win);
             bunnies.push_back(newBunny);
-            mouseWasDown = true;
+            mouseWasDown = win.MouseIsDown();
         }
         for(int i = 0; i < bunnies.size(); i++)
         {
-            cout << "Part 2." << i << endl;
             win.DrawRectangle(bunnies[i].x, bunnies[i].y, 50, 50, Color(0, 0, 0), true);
-            win.Refresh();
         }
         for(int n = 0; n < bunnies.size(); n++)
         {
-            cout << "Part 3." << n << endl;
             MoveBunny(bunnies[n]);
         }
         for(int t = 0; t < bunnies.size(); t++)
         {
-            cout << "Part 4." << t << endl;
             win.DrawImage("bunny.bmp", bunnies[t].x, bunnies[t].y, 50, 50);
-            cout << "Draw success" << endl;
-            win.Refresh();
-            cout << "Render success" << endl;
         }
-        cout << "Part 5" << endl;
         win.Refresh();
         win.Pause(0.1);
     }
@@ -197,6 +188,7 @@ void SetupBunny(Bunny & b, GraphicsWindow w)
     b.x = w.MouseX();
     b.y = w.MouseY();
     b.s = rand()%20+1;
+    cout << b.s << endl;
 }
 
 void MoveBunny(Bunny & b)
@@ -241,7 +233,7 @@ void Task3()
     }
     win.DrawString("LEVEL COMPLETE", 200, 300, Color(255, 255, 255), 48);
     win.Refresh();
-    win.WaitForKeyPress();
+    win.Pause(2);
 }
 
 void SetupPlanet(Planet & p)
