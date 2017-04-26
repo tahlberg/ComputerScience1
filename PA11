@@ -79,7 +79,7 @@ void GetStudentData(Student & s)
         sTotal += scores[i];
         while(scores[i] < 0 || scores[i] > 100)
         {
-        cout << "Invalid score. Please enter percentage 0 - 100."
+        cout << "Invalid score. Please enter percentage 0 - 100.";
         cin >> scores[i];
         }
     }
