@@ -32,7 +32,7 @@ struct Bunny
     int y;
     int s;
 };
-void SetupBunny(Bunny & b, GraphicsWindow w);
+void SetupBunny(Bunny & b, GraphicsWindow & w);
 void MoveBunny(Bunny & b);
 
 //Task 3
@@ -164,8 +164,8 @@ void Task2()
             Bunny newBunny;
             SetupBunny(newBunny, win);
             bunnies.push_back(newBunny);
-            mouseWasDown = win.MouseIsDown();
         }
+        mouseWasDown = win.MouseIsDown();
         for(int i = 0; i < bunnies.size(); i++)
         {
             win.DrawRectangle(bunnies[i].x, bunnies[i].y, 50, 50, Color(0, 0, 0), true);
@@ -183,12 +183,11 @@ void Task2()
     }
 }
 
-void SetupBunny(Bunny & b, GraphicsWindow w)
+void SetupBunny(Bunny & b, GraphicsWindow & w)
 {
     b.x = w.MouseX();
     b.y = w.MouseY();
     b.s = rand()%20+1;
-    cout << b.s << endl;
 }
 
 void MoveBunny(Bunny & b)
@@ -196,7 +195,7 @@ void MoveBunny(Bunny & b)
     b.y += b.s;
     if(b.y > 600 || b.y < 0)
     {
-        b.y *= -1;
+        b.s *= -1;
     }
 }
 
