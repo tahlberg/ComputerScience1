@@ -114,7 +114,7 @@ void ReturnStudentData(Student s, int ID)
         cout << left << setw(15) << "Quiz Average: " << s.quizAverage << endl;
         cout << left << setw(15) << "Grade: " << s.grade << endl;
     }
-    else
+    else if(s.idnum != ID)
     {
         cout << "Not found" << endl;
     }
