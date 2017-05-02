@@ -1,0 +1,19 @@
+All code is subject to change.
+Project is using the LPC Graphics Library developed by Colin Schatz.
+
+Function references are subject to rework as development continues.
+Not all variables and functions are currently in use.
+Code may contain cout commands to act as checks to verify crash locations and whether or not functions are correctly modifying data.
+
+Known Bugs:
+  Graphics Window crashes upon launch.
+  StartGraphics function fails to properly run (the check cout does not print anything)
+  If player stats do properly generate, the player health is 0.
+  
+ To-Do:
+  Finish graphics implementation
+  Overhaul function reference using the new Game struct
+  Implement button function to allow user input
+  Boss graphics?
+  Rebalance attacks and boss
+  Death screen with vector of bosses killed.
