@@ -40,25 +40,36 @@ struct Combat
     bool bMiss;
 };
 
-struct Game
-{
-    struct Player player;
-    struct Boss boss;
-    struct Combat combat;
-};
-
 struct Info
 {
-    int encounters;
+    int encounters = 0;
     vector<Boss> killed;
+};
+
+struct Game
+{
+    Player player;
+    Boss boss;
+    Combat combat;
+    Info info;
 };
 
 
 int main();
 void MenuGraphic(GraphicsWindow & win, Game game);
+int ButtonMenu(GraphicsWindow & win);
+void DeathScreen(GraphicsWindow & w, Game g);
+
+void FeedSlashAttack(GraphicsWindow & w, int & n);
+void FeedStabAttack(GraphicsWindow & w, int & n);
+void FeedSmashAttack(GraphicsWindow & w, int & n);
+void FeedParryAttack(GraphicsWindow & w, int & n);
+void FeedPDamage(GraphicsWindow & w, int & n, Game g);
+void FeedBDamage(GraphicsWindow & w, int & n, Game g);
+void TextCheck(GraphicsWindow & w, int & n);
 
 //Boss Generating
-Boss GenNewBoss(Game g);
+Game GenNewBoss(Game g);
 string BossNameGen();
 
 //Core Functions
@@ -66,21 +77,14 @@ Game StartGame(Game g);
 void EndScreen();
 
 //Damage Resolution
-void ResolvePDamage(Combat c, Player p, Boss & b);
-void ResolveBDamage(Combat c, Player & p, Boss b);
-
-//Menus
-void CombatMenu(Combat com, Player play, Boss boss);
-void AttackMenu(Combat com, Player play, Boss boss);
-void MagicMenu(Combat com, Player play, Boss boss);
-void BagMenu(Combat com, Player play, Boss boss);
-void OptionsMenu(Combat com, Player pay, Boss boss);
+Game ResolvePDamage(Game g);
+Game ResolveBDamage(Game g);
 
 //Player Attacks
-void SlashAttack(Combat & c, Player p);
-void StabAttack(Combat & c, Player p);
-void SmashAttack(Combat & c, Player p);
-void ParryAttack(Combat & c, Player p);
+Game SlashAttack(Game g);
+Game StabAttack(Game g);
+Game SmashAttack(Game g);
+Game ParryAttack(Game g);
 
 
 #endif // GAMEHEADER_H_INCLUDED
