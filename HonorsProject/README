@@ -6,14 +6,14 @@ Not all variables and functions are currently in use.
 Code may contain cout commands to act as checks to verify crash locations and whether or not functions are correctly modifying data.
 
 Known Bugs:
-  Graphics Window crashes upon launch.
-  StartGraphics function fails to properly run (the check cout does not print anything)
-  If player stats do properly generate, the player health is 0.
+  Text displayed will not display damage dealt
+  Text displayed will sometimes take up an extra line
+  Text displayed will occasionally reset on the wrong line
   
  To-Do:
-  Finish graphics implementation
-  Overhaul function reference using the new Game struct
-  Implement button function to allow user input
-  Boss graphics?
+  Add list of bosses killed along with player stats to death screen.
   Rebalance attacks and boss
-  Death screen with vector of bosses killed.
+  Potions?
+    Shop?
+  Boss graphics?
+  Music?
