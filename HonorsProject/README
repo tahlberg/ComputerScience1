@@ -6,7 +6,6 @@ Not all variables and functions are currently in use.
 Code may contain cout commands to act as checks to verify crash locations and whether or not functions are correctly modifying data.
 
 Known Bugs:
-  Text displayed will not display damage dealt
   Text displayed will sometimes take up an extra line
   Text displayed will occasionally reset on the wrong line
   
