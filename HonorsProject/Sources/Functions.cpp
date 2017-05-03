@@ -9,23 +9,28 @@ Game StartGame(Game g)
     g.player.atk = (rand()%8)+7;
     g.player.def = (rand()%8)+7;
     g.player.health = g.player.totalHealth;
+    g.player.alive = true;
     g.boss.name = BossNameGen();
     g.boss.totalHealth = (rand()%31)+100;
     g.boss.atk = (rand()%6)+10;
     g.boss.def = (rand())%6+10;
     g.boss.health = g.boss.totalHealth;
+    g.boss.alive = true;
+    g.info.encounters = 1;
+    return g;
 }
 
 //Generates the next boss
-Boss GenNewBoss(Game g)
+Game GenNewBoss(Game g)
 {
-    Boss b;
-    b.name = BossNameGen();
-    b.totalHealth += rand()%31+1;
-    b.atk += rand()%6+1;
-    b.def += rand()%6+1;
-    b.health = b.totalHealth;
-    cout << "You encountered " << b.name << "!" << endl;
+    g.boss.name = BossNameGen();
+    g.boss.totalHealth += rand()%31+1;
+    g.boss.atk += rand()%6+1;
+    g.boss.def += rand()%6+1;
+    g.boss.health = g.boss.totalHealth;
+    g.boss.alive = true;
+    g.info.encounters++;
+    return g;
 }
 
 //Generates the name of the boss
@@ -109,73 +114,79 @@ string BossNameGen()
 }
 
 // Slash attack calculations - Low Damage, High Accuracy
-void SlashAttack(Combat & c, Player p)
+Game SlashAttack(Game g)
 {
-    c.pAtkChance = rand()%9;
-    c.pDamage = rand()%10+10+p.atk;
+    g.combat.pAtkChance = rand()%9;
+    g.combat.pDamage = rand()%10+10+g.player.atk;
+    return g;
 }
 
 //Stab attack calculations - Medium Damage, Medium Accuracy
-void StabAttack(Combat & c, Player p)
+Game StabAttack(Game g)
 {
-    c.pAtkChance = rand()%4;
-    c.pDamage = rand()%10+20+p.atk;
+    g.combat.pAtkChance = rand()%4;
+    g.combat.pDamage = rand()%10+20+g.player.atk;
+    return g;
 }
 
 //Smash attack calculations - High Damage, Low Accuracy
-void SmashAttack(Combat & c, Player p)
+Game SmashAttack(Game g)
 {
-    c.pAtkChance = rand()%2;
-    c.pDamage = rand()%10+35+p.atk;
+    g.combat.pAtkChance = rand()%2;
+    g.combat.pDamage = rand()%10+35+g.player.atk;
+    return g;
 }
 
 //Blocks nex8t boss attack - WIP
-void ParryAttack(Combat & c, Player p)
+Game ParryAttack(Game g)
 {
-    c.pAtkChance = rand()%3;
-    if(c.pAtkChance != 0)
+    g.combat.pAtkChance = rand()%3;
+    if(g.combat.pAtkChance != 0)
     {
-        c.bAtkChance = 0;
+        g.combat.bAtkChance = 0;
     }
-    c.pDamage = rand()%10+25+p.atk;
+    g.combat.pDamage = rand()%10+25+g.player.atk;
+    return g;
 }
 
 //Calculation for damage dealt to boss
-void ResolvePDamage(Combat c, Player p, Boss & b)
+Game ResolvePDamage(Game g)
 {
-    c.pDamage -= (b.def / 2);
-    if(c.pAtkChance == 0)
+    g.combat.pDamage -= (g.boss.def / 2);
+    if(g.combat.pAtkChance == 0)
     {
-        c.pMiss = true;
-        c.pDamage = 0;
+        g.combat.pMiss = true;
+        g.combat.pDamage = 0;
     }
     else
     {
-        b.health -= c.pDamage;
-        if(b.health <= 0)
+        g.boss.health -= g.combat.pDamage;
+        if(g.boss.health <= 0)
         {
-            b.alive = false;
+            g.boss.alive = false;
         }
     }
+    return g;
 }
 
 //Calculation for damage dealt to player
-void ResolveBDamage(Combat c, Player & p, Boss b)
+Game ResolveBDamage(Game g)
 {
-    c.bAtkChance = rand()%8;
-    c.bDamage = rand()%10+b.atk;
-    c.bDamage -= (p.def / 2);
-    if(c.bAtkChance == 0)
+    g.combat.bAtkChance = rand()%8;
+    g.combat.bDamage = rand()%10+g.boss.atk;
+    g.combat.bDamage -= (g.player.def / 2);
+    if(g.combat.bAtkChance == 0)
     {
-        c.bMiss = 0;
-        c.bDamage = 0;
+        g.combat.bMiss = 0;
+        g.combat.bDamage = 0;
     }
     else
     {
-        p.health -= c.bDamage;
-        if(p.health <= 0)
+        g.player.health -= g.combat.bDamage;
+        if(g.player.health <= 0)
         {
-            p.alive = false;
+            g.player.alive = false;
         }
     }
+    return g;
 }
