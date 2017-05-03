@@ -1,28 +1,167 @@
 #include "GameHeader.h"
 
+struct Button
+{
+    string name;
+    int x;
+    int y;
+    int num;
+};
+
+void EraseDisplay(GraphicsWindow & win);
 void DrawDisplay(GraphicsWindow & w);
 void DrawData(GraphicsWindow & w, Game g);
+void DrawButton(GraphicsWindow & win, string str, int x, int y, int w, int h, Color c);
+string EncounterText(Game g);
 
 void MenuGraphic(GraphicsWindow & win, Game game)
 {
+    EraseDisplay(win);
     DrawDisplay(win);
     DrawData(win, game);
-    win.WaitForKeyPress();
 }
 
-//Draws the framework for the display
+int ButtonMenu(GraphicsWindow & win)
+{
+    Button stab = {"Slash", 100, ((win.GetHeight()/3)*2)+25, 1};
+    Button slash = {"Stab", (win.GetWidth()/2)+200, ((win.GetHeight()/3)*2)+25, 2};
+    Button smash = {"Smash", 100, ((win.GetHeight()/3)*2)+135, 3};
+    Button parry = {"Parry", (win.GetWidth()/2)+200, ((win.GetHeight()/3)*2)+135, 4};
+    Button buttons[4] = {stab, slash, smash, parry};
+    bool buttonPress = false;
+    while(buttonPress == false)
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            DrawButton(win, buttons[i].name, buttons[i].x, buttons[i].y, 200, 100, Color(255, 255, 255));
+        }
+        win.WaitForMouseDown();
+        win.WaitForMouseUp();
+        for(int n = 0; n < 4; n++)
+        {
+            if(win.MouseX() >= buttons[n].x && win.MouseX() <= (buttons[n].x + 200) && win.MouseY() >= buttons[n].y && win.MouseY() <= (buttons[n].y + 100))
+            {
+                return buttons[n].num;
+            }
+        }
+    }
+}
+
+void DeathScreen(GraphicsWindow & w, Game g)
+{
+    w.DrawRectangle(0, 0, w.GetWidth(), w.GetHeight(), Color(0, 0, 0), true);
+    w.DrawString("You Died", 400, 300, Color(255, 0, 0), 64);
+    w.Refresh();
+    w.WaitForKeyPress();
+}
+
+void EraseDisplay(GraphicsWindow & w)
+{
+    Color black(0, 0, 0);
+    w.DrawRectangle(0, 0, w.GetWidth()/3, w.GetHeight()/5, black, true);
+    w.DrawRectangle((w.GetWidth()/3)*2, 0, w.GetWidth()/3, w.GetHeight()/5, black, true);
+    w.DrawRectangle(w.GetWidth()/3, 0, w.GetWidth()/3, w.GetHeight()/5, black, true);
+    w.DrawRectangle(0, (w.GetHeight()/3)*2, w.GetWidth(), w.GetHeight()/3, black, true);
+}
+
 void DrawDisplay(GraphicsWindow & w)
 {
     Color white(255, 255, 255);
     w.DrawRectangle(0, 0, w.GetWidth()/3, w.GetHeight()/5, white, false);
     w.DrawRectangle((w.GetWidth()/3)*2, 0, w.GetWidth()/3, w.GetHeight()/5, white, false);
     w.DrawRectangle(w.GetWidth()/3, 0, w.GetWidth()/3, w.GetHeight()/5, white, false);
-    w.DrawRectangle(0, (w.GetWidth()/4)*2, w.GetWidth(), w.GetHeight()/3, white, false);
+    w.DrawRectangle(0, (w.GetHeight()/3)*2, w.GetWidth(), w.GetHeight()/3, white, false);
     w.Refresh();
 }
 
 void DrawData(GraphicsWindow & w, Game g)
 {
     Color white(255, 255, 255);
-    w.DrawString(IntToString(g.player.totalHealth), 5, 5, white, 18);
+    string playerHealth = "Player Health: ";
+    playerHealth += IntToString(g.player.health);
+    playerHealth += " / ";
+    playerHealth += IntToString(g.player.totalHealth);
+    string bossHealth = "Boss Health: ";
+    bossHealth += IntToString(g.boss.health);
+    bossHealth += " / ";
+    bossHealth += IntToString(g.boss.totalHealth);
+    w.DrawString(playerHealth, 10, 10, white, 24);
+    w.DrawString("Encounter", (w.GetWidth()/3)+75, 10, white, 48);
+    w.DrawString(IntToString(g.info.encounters), (w.GetWidth()/3)+150, 60, white, 72);
+    w.DrawString(g.boss.name, ((w.GetWidth()/3)*2)+10, 10, white, 28);
+    w.DrawString(bossHealth, ((w.GetWidth()/3)*2)+10, 50, white, 24);
+    w.Refresh();
+}
+
+void DrawButton(GraphicsWindow & win, string str, int x, int y, int w, int h, Color c)
+{
+    Color blue(0, 0, 255);
+    win.DrawRectangle(x, y, w, h, c, false);
+    win.DrawString(str, x+10, y+10, c, sqrt(w)+w/3);
+    win.Refresh();
+}
+
+void FeedSlashAttack(GraphicsWindow & w, int & n)
+{
+    TextCheck(w, n);
+    w.DrawString("You used Slash!", 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
+    n++;
+    cout << n << endl;
+}
+
+void FeedStabAttack(GraphicsWindow & w, int & n)
+{
+    TextCheck(w, n);
+    w.DrawString("You used Stab!", 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
+    n++;
+}
+
+void FeedSmashAttack(GraphicsWindow & w, int & n)
+{
+    TextCheck(w, n);
+    n++;
+    w.DrawString("You used Smash!", 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
+    n++;
+}
+
+void FeedParryAttack(GraphicsWindow & w, int & n)
+{
+    TextCheck(w, n);
+    w.DrawString("You used Parry!", 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
+    n++;
+}
+
+void FeedPDamage(GraphicsWindow & w, int & n, Game g)
+{
+    TextCheck(w, n);
+    string pDamageTxt = g.boss.name;
+    pDamageTxt += " took ";
+    pDamageTxt += g.combat.pDamage;
+    pDamageTxt += " damage!";
+    cout << pDamageTxt << endl;
+    cout << g.combat.pDamage << endl;
+    w.DrawString(pDamageTxt, 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
+    n++;
+}
+
+void FeedBDamage(GraphicsWindow & w, int & n, Game g)
+{
+    TextCheck(w, n);
+    string bDamageTxt = "You took ";
+    bDamageTxt += g.combat.bDamage;
+    bDamageTxt += " damage!";
+    cout << bDamageTxt << endl;
+    cout << g.combat.bDamage << endl;
+    w.DrawString(bDamageTxt, 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
+    n++;
+}
+
+void TextCheck(GraphicsWindow & w, int & n)
+{
+    if(n >= 12)
+    {
+        n = 0;
+        w.DrawRectangle(0, (w.GetHeight()/5)+1, w.GetWidth(), ((w.GetHeight()/5)*2)-2, Color(0, 0, 0), true);
+        w.Refresh();
+    }
 }
