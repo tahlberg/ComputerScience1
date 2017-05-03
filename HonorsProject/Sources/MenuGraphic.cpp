@@ -1,5 +1,6 @@
 #include "GameHeader.h"
 
+//Struct that contains button information
 struct Button
 {
     string name;
@@ -7,12 +8,11 @@ struct Button
     int y;
     int num;
 };
-
+//Drawing Display
 void EraseDisplay(GraphicsWindow & win);
 void DrawDisplay(GraphicsWindow & w);
 void DrawData(GraphicsWindow & w, Game g);
 void DrawButton(GraphicsWindow & win, string str, int x, int y, int w, int h, Color c);
-string EncounterText(Game g);
 
 void MenuGraphic(GraphicsWindow & win, Game game)
 {
@@ -21,6 +21,7 @@ void MenuGraphic(GraphicsWindow & win, Game game)
     DrawData(win, game);
 }
 
+//Button use detection for the four attack functions
 int ButtonMenu(GraphicsWindow & win)
 {
     Button stab = {"Slash", 100, ((win.GetHeight()/3)*2)+25, 1};
@@ -64,6 +65,7 @@ void EraseDisplay(GraphicsWindow & w)
     w.DrawRectangle(0, (w.GetHeight()/3)*2, w.GetWidth(), w.GetHeight()/3, black, true);
 }
 
+//Draws the UI framework
 void DrawDisplay(GraphicsWindow & w)
 {
     Color white(255, 255, 255);
@@ -74,6 +76,7 @@ void DrawDisplay(GraphicsWindow & w)
     w.Refresh();
 }
 
+//Draws all the printed information in the UI
 void DrawData(GraphicsWindow & w, Game g)
 {
     Color white(255, 255, 255);
@@ -93,6 +96,7 @@ void DrawData(GraphicsWindow & w, Game g)
     w.Refresh();
 }
 
+//Draws a button
 void DrawButton(GraphicsWindow & win, string str, int x, int y, int w, int h, Color c)
 {
     Color blue(0, 0, 255);
@@ -101,6 +105,7 @@ void DrawButton(GraphicsWindow & win, string str, int x, int y, int w, int h, Co
     win.Refresh();
 }
 
+//Prints the use of Slash
 void FeedSlashAttack(GraphicsWindow & w, int & n)
 {
     TextCheck(w, n);
@@ -109,6 +114,7 @@ void FeedSlashAttack(GraphicsWindow & w, int & n)
     cout << n << endl;
 }
 
+//Prints the use of Stab
 void FeedStabAttack(GraphicsWindow & w, int & n)
 {
     TextCheck(w, n);
@@ -116,6 +122,7 @@ void FeedStabAttack(GraphicsWindow & w, int & n)
     n++;
 }
 
+//Prints the use of Smash
 void FeedSmashAttack(GraphicsWindow & w, int & n)
 {
     TextCheck(w, n);
@@ -124,6 +131,7 @@ void FeedSmashAttack(GraphicsWindow & w, int & n)
     n++;
 }
 
+//Prints the use of Parry
 void FeedParryAttack(GraphicsWindow & w, int & n)
 {
     TextCheck(w, n);
@@ -131,6 +139,7 @@ void FeedParryAttack(GraphicsWindow & w, int & n)
     n++;
 }
 
+//Prints the damage done by player
 void FeedPDamage(GraphicsWindow & w, int & n, Game g)
 {
     TextCheck(w, n);
@@ -144,6 +153,7 @@ void FeedPDamage(GraphicsWindow & w, int & n, Game g)
     n++;
 }
 
+//Prints the damage done by boss
 void FeedBDamage(GraphicsWindow & w, int & n, Game g)
 {
     TextCheck(w, n);
@@ -156,6 +166,7 @@ void FeedBDamage(GraphicsWindow & w, int & n, Game g)
     n++;
 }
 
+//Checks if the text window is full and clears it if it is.
 void TextCheck(GraphicsWindow & w, int & n)
 {
     if(n >= 12)
