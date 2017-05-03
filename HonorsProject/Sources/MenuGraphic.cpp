@@ -111,7 +111,6 @@ void FeedSlashAttack(GraphicsWindow & w, int & n)
     TextCheck(w, n);
     w.DrawString("You used Slash!", 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
     n++;
-    cout << n << endl;
 }
 
 //Prints the use of Stab
@@ -147,8 +146,6 @@ void FeedPDamage(GraphicsWindow & w, int & n, Game g)
     pDamageTxt += " took ";
     pDamageTxt += g.combat.pDamage;
     pDamageTxt += " damage!";
-    cout << pDamageTxt << endl;
-    cout << g.combat.pDamage << endl;
     w.DrawString(pDamageTxt, 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
     n++;
 }
@@ -160,8 +157,6 @@ void FeedBDamage(GraphicsWindow & w, int & n, Game g)
     string bDamageTxt = "You took ";
     bDamageTxt += g.combat.bDamage;
     bDamageTxt += " damage!";
-    cout << bDamageTxt << endl;
-    cout << g.combat.bDamage << endl;
     w.DrawString(bDamageTxt, 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
     n++;
 }
