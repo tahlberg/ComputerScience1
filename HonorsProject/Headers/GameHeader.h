@@ -9,6 +9,8 @@
 
 using namespace std;
 
+///Structs
+//Player Data
 struct Player
 {
     int health;
@@ -20,6 +22,7 @@ struct Player
     bool alive;
 };
 
+//Boss Data
 struct Boss
 {
     string name;
@@ -30,6 +33,7 @@ struct Boss
     bool alive;
 };
 
+//Combat Data
 struct Combat
 {
     int pAtkChance;
@@ -40,12 +44,14 @@ struct Combat
     bool bMiss;
 };
 
+//General Information
 struct Info
 {
     int encounters = 0;
     vector<Boss> killed;
 };
 
+//Structure that contains all the structures for easy passing
 struct Game
 {
     Player player;
@@ -54,12 +60,16 @@ struct Game
     Info info;
 };
 
-
+///Functions
+//Main declaration to allow reference by external source files
 int main();
+
+//Functions used in Main
 void MenuGraphic(GraphicsWindow & win, Game game);
 int ButtonMenu(GraphicsWindow & win);
 void DeathScreen(GraphicsWindow & w, Game g);
 
+//Text wheel functions in Main
 void FeedSlashAttack(GraphicsWindow & w, int & n);
 void FeedStabAttack(GraphicsWindow & w, int & n);
 void FeedSmashAttack(GraphicsWindow & w, int & n);
@@ -68,13 +78,10 @@ void FeedPDamage(GraphicsWindow & w, int & n, Game g);
 void FeedBDamage(GraphicsWindow & w, int & n, Game g);
 void TextCheck(GraphicsWindow & w, int & n);
 
-//Boss Generating
+//Encounter Generating
+Game StartGame(Game g);
 Game GenNewBoss(Game g);
 string BossNameGen();
-
-//Core Functions
-Game StartGame(Game g);
-void EndScreen();
 
 //Damage Resolution
 Game ResolvePDamage(Game g);
