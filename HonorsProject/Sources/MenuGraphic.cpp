@@ -144,7 +144,7 @@ void FeedPDamage(GraphicsWindow & w, int & n, Game g)
     TextCheck(w, n);
     string pDamageTxt = g.boss.name;
     pDamageTxt += " took ";
-    pDamageTxt += g.combat.pDamage;
+    pDamageTxt += IntToString(g.combat.pDamage);
     pDamageTxt += " damage!";
     w.DrawString(pDamageTxt, 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
     n++;
@@ -155,7 +155,7 @@ void FeedBDamage(GraphicsWindow & w, int & n, Game g)
 {
     TextCheck(w, n);
     string bDamageTxt = "You took ";
-    bDamageTxt += g.combat.bDamage;
+    bDamageTxt += IntToString(g.combat.bDamage);
     bDamageTxt += " damage!";
     w.DrawString(bDamageTxt, 10, (w.GetHeight()/5)+10+(20*n), Color(255, 255, 255), 24);
     n++;
