@@ -137,7 +137,7 @@ Game SmashAttack(Game g)
     return g;
 }
 
-//Blocks next boss attack - WIP
+//Blocks nex8t boss attack - WIP
 Game ParryAttack(Game g)
 {
     g.combat.pAtkChance = rand()%3;
