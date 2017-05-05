@@ -1,20 +1,12 @@
 All code is subject to change.
 Project is using the LPC Graphics Library developed by Colin Schatz.
 
-Function references are subject to rework as development continues.
-Not all variables and functions are currently in use.
-Code may contain cout commands to act as checks to verify crash locations and whether or not functions are correctly modifying data.
-
 Known Bugs:
-  Text displayed will sometimes take up an extra line
-  Text displayed will occasionally reset on the wrong line
+  None!
   
  To-Do:
-  Increasing player stats / levels
   Add list of bosses killed along with player stats to death screen.
   Rebalance attacks and boss
-  Potions?
-    Shop?
-    Replace parry with potion option - potions drop from bosses?
+  Save/Load game
   Boss graphics?
   Music?
