@@ -2,7 +2,7 @@ All code is subject to change.
 Project is using the LPC Graphics Library developed by Colin Schatz.
 
 Known Bugs:
-  None!
+  Fix player overheal
   
  To-Do:
   Add list of bosses killed along with player stats to death screen.
