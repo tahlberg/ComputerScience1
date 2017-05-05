@@ -36,18 +36,20 @@ struct Boss
 //Combat Data
 struct Combat
 {
-    int pAtkChance;
-    int bAtkChance;
-    int pDamage;
-    int bDamage;
-    bool pMiss;
-    bool bMiss;
+    int pAtkChance = 0;
+    int bAtkChance = 0;
+    int pDamage = 0;
+    int bDamage = 0;
+    bool pMiss = 0;
+    bool bMiss = 0;
 };
 
 //General Information
 struct Info
 {
     int encounters = 0;
+    int numPotions = 0;
+    int numPrint = 0;
     vector<Boss> killed;
 };
 
@@ -64,34 +66,49 @@ struct Game
 //Main declaration to allow reference by external source files
 int main();
 
-//Functions used in Main
+
+//The Game
+void PlayGame(GraphicsWindow & gameWindow, Game & game);
+
+//Functions used in PlayGame
+void StartGame(GraphicsWindow & win, Game & g);
 void MenuGraphic(GraphicsWindow & win, Game game);
 int ButtonMenu(GraphicsWindow & win);
 void DeathScreen(GraphicsWindow & w, Game g);
+bool DeathMenu(GraphicsWindow & w, Game g);
 
 //Text wheel functions in Main
-void FeedSlashAttack(GraphicsWindow & w, int & n);
-void FeedStabAttack(GraphicsWindow & w, int & n);
-void FeedSmashAttack(GraphicsWindow & w, int & n);
-void FeedParryAttack(GraphicsWindow & w, int & n);
-void FeedPDamage(GraphicsWindow & w, int & n, Game g);
-void FeedBDamage(GraphicsWindow & w, int & n, Game g);
-void TextCheck(GraphicsWindow & w, int & n);
+void FeedLevelUp(GraphicsWindow  & w, Game & g);
+void FeedNewEncounter(GraphicsWindow & w, Game & g);
+void FeedPotionDrop(GraphicsWindow & w, Game & g, int p);
+void FeedSlashAttack(GraphicsWindow & w, Game & g);
+void FeedStabAttack(GraphicsWindow & w, Game & g);
+void FeedSmashAttack(GraphicsWindow & w, Game & g);
+void FeedParryAttack(GraphicsWindow & w, Game & g);
+void FeedPDamage(GraphicsWindow & w, Game & g);
+void FeedBDamage(GraphicsWindow & w, Game & g);
+void FeedNoPotion(GraphicsWindow & w, Game & g);
+void FeedPotion(GraphicsWindow & w, Game & g, int h);
+void TextCheck(GraphicsWindow & w, Game & g);
 
-//Encounter Generating
-Game StartGame(Game g);
-Game GenNewBoss(Game g);
+//Stat Generating
+void NewEncounter(GraphicsWindow & win, Game & game);
+void LevelPlayer(GraphicsWindow & win, Game & g);
+void DropPotions(GraphicsWindow & win, Game & g);
+void GenNewBoss(GraphicsWindow & win, Game & g);
 string BossNameGen();
 
+//Potion Use
+void HealthPotion(GraphicsWindow & win, Game & g);
+
 //Damage Resolution
-Game ResolvePDamage(Game g);
-Game ResolveBDamage(Game g);
+void ResolvePDamage(Game & g);
+void ResolveBDamage(Game & g);
 
 //Player Attacks
-Game SlashAttack(Game g);
-Game StabAttack(Game g);
-Game SmashAttack(Game g);
-Game ParryAttack(Game g);
-
+void SlashAttack(Game & g);
+void StabAttack(Game & g);
+void SmashAttack(Game & g);
+void ParryAttack(Game & g);
 
 #endif // GAMEHEADER_H_INCLUDED
