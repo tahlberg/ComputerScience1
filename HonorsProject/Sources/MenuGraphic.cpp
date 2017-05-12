@@ -63,6 +63,7 @@ void DeathScreen(GraphicsWindow & w, Game g)
     if(retry == true)
     {
         w.DrawRectangle(0, 0, w.GetWidth(), w.GetHeight(), Color(0, 0, 0), true);
+        g.info.numPrint = 0;
         PlayGame(w, g);
     }
 }
@@ -167,6 +168,7 @@ void FeedNewEncounter(GraphicsWindow & w, Game & g)
     TextCheck(w, g);
     string encounterText = "You encountered ";
     encounterText += g.boss.name;
+    encounterText += "!";
     w.DrawString(encounterText, 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
     g.info.numPrint++;
 }
@@ -174,10 +176,21 @@ void FeedNewEncounter(GraphicsWindow & w, Game & g)
 void FeedPotionDrop(GraphicsWindow & w, Game & g, int p)
 {
     TextCheck(w, g);
-    string dropText = "You've found ";
-    dropText += p;
-    dropText += " Health Potions!";
-    w.DrawString(dropText, 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    string dropText;
+    if(p == 1)
+    {
+        dropText = "You've found ";
+        dropText += IntToString(p);
+        dropText += " Health Potion!";
+        w.DrawString(dropText, 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    }
+    if(p > 1)
+    {
+        dropText = "You've found ";
+        dropText += IntToString(p);
+        dropText += " Health Potions!";
+        w.DrawString(dropText, 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    }
     g.info.numPrint++;
 }
 
@@ -230,7 +243,14 @@ void FeedSmashAttack(GraphicsWindow & w, Game & g)
 void FeedParryAttack(GraphicsWindow & w, Game & g)
 {
     TextCheck(w, g);
-    w.DrawString("You used Parry!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    if(g.combat.parry == true)
+    {
+        w.DrawString("You parried the attack!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    }
+    else if(g.combat.parry == false)
+    {
+        w.DrawString("You failed to parry!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    }
     g.info.numPrint++;
 }
 
@@ -243,6 +263,29 @@ void FeedPDamage(GraphicsWindow & w, Game & g)
     pDamageTxt += IntToString(g.combat.pDamage);
     pDamageTxt += " damage!";
     w.DrawString(pDamageTxt, 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    g.info.numPrint++;
+}
+
+void FeedPlayerMiss(GraphicsWindow & w, Game & g)
+{
+    TextCheck(w, g);
+    if(g.combat.parry == false)
+    {
+        w.DrawString("You missed!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    }
+    else if(g.combat.parry == true)
+    {
+        w.DrawString("You successfully parried the attack!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+    }
+    g.info.numPrint++;
+}
+
+void FeedBossMiss(GraphicsWindow & w, Game & g)
+{
+    TextCheck(w, g);
+    string missText = g.boss.name;
+    missText += " missed!";
+    w.DrawString(missText, 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
     g.info.numPrint++;
 }
 
