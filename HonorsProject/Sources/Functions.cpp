@@ -1,24 +1,6 @@
 #include "GameHeader.h"
 
 ///Define Functions
-//Generates the player and first boss
-void StartGame(GraphicsWindow & win, Game & g)
-{
-    g.player.totalHealth = (rand()%10) + 80;
-    g.player.atk = (rand()%8)+7;
-    g.player.def = (rand()%8)+7;
-    g.player.health = g.player.totalHealth;
-    g.player.alive = true;
-    g.boss.name = BossNameGen();
-    g.boss.totalHealth = (rand()%31)+100;
-    g.boss.atk = (rand()%6)+10;
-    g.boss.def = (rand())%6+10;
-    g.boss.health = g.boss.totalHealth;
-    g.boss.alive = true;
-    g.info.numPotions = 1;
-    g.info.encounters = 1;
-    FeedNewEncounter(win, g);
-}
 
 void PlayGame(GraphicsWindow & gameWindow, Game & game)
 {
@@ -62,10 +44,8 @@ void PlayGame(GraphicsWindow & gameWindow, Game & game)
                 }
                 break;
             }
-            ResolvePDamage(game);
-            FeedPDamage(gameWindow, game);
-            ResolveBDamage(game);
-            FeedBDamage(gameWindow, game);
+            ResolvePDamage(gameWindow, game);
+            ResolveBDamage(gameWindow, game);
             if(game.player.alive == false)
             {
                 break;
@@ -75,6 +55,25 @@ void PlayGame(GraphicsWindow & gameWindow, Game & game)
     }
     DeathScreen(gameWindow, game);
 }
+
+void StartGame(GraphicsWindow & win, Game & g)
+{
+    g.player.totalHealth = (rand()%10) + 80;
+    g.player.atk = (rand()%8)+7;
+    g.player.def = (rand()%8)+7;
+    g.player.health = g.player.totalHealth;
+    g.player.alive = true;
+    g.boss.name = BossNameGen();
+    g.boss.totalHealth = (rand()%31)+100;
+    g.boss.atk = (rand()%6)+10;
+    g.boss.def = (rand())%6+10;
+    g.boss.health = g.boss.totalHealth;
+    g.boss.alive = true;
+    g.info.numPotions = 1;
+    g.info.encounters = 1;
+    FeedNewEncounter(win, g);
+}
+
 
 void NewEncounter(GraphicsWindow & win, Game & game)
 {
@@ -86,7 +85,7 @@ void NewEncounter(GraphicsWindow & win, Game & game)
 void LevelPlayer(GraphicsWindow & win, Game & g)
 {
     int healthIncrease;
-    healthIncrease = rand()%15+20;
+    healthIncrease = rand()%10+20;
     g.player.totalHealth += healthIncrease;
     g.player.health += healthIncrease;
     g.player.atk += rand()%8+1;
@@ -220,8 +219,13 @@ void HealthPotion(GraphicsWindow & win, Game & g)
     }
     else
     {
-        int healthHealed = g.player.totalHealth/2;
+        int healthHealed = g.player.totalHealth;
         g.player.health += healthHealed;
+        if(g.player.health > g.player.totalHealth)
+        {
+            healthHealed -= g.player.health - g.player.totalHealth;
+            g.player.health = g.player.totalHealth;
+        }
         g.info.numPotions--;
         FeedPotion(win, g, healthHealed);
     }
@@ -254,23 +258,25 @@ void ParryAttack(Game & g)
     g.combat.pAtkChance = rand()%3;
     if(g.combat.pAtkChance != 0)
     {
-        g.combat.bAtkChance = 0;
+        g.combat.parry = true;
+        g.combat.pDamage = rand()%10+25+g.player.atk;
     }
-    g.combat.pDamage = rand()%10+25+g.player.atk;
 }
 
 //Calculation for damage dealt to boss
-void ResolvePDamage(Game & g)
+void ResolvePDamage(GraphicsWindow & win, Game & g)
 {
     g.combat.pDamage -= (g.boss.def / 2);
     if(g.combat.pAtkChance == 0)
     {
         g.combat.pMiss = true;
         g.combat.pDamage = 0;
+        FeedPlayerMiss(win, g);
     }
-    else
+    else if(g.combat.pAtkChance > 0)
     {
         g.boss.health -= g.combat.pDamage;
+        FeedPDamage(win, g);
         if(g.boss.health <= 0)
         {
             g.boss.alive = false;
@@ -279,19 +285,22 @@ void ResolvePDamage(Game & g)
 }
 
 //Calculation for damage dealt to player
-void ResolveBDamage(Game & g)
+void ResolveBDamage(GraphicsWindow & win, Game & g)
 {
     g.combat.bAtkChance = rand()%8;
     g.combat.bDamage = rand()%10+g.boss.atk;
     g.combat.bDamage -= (g.player.def / 2);
-    if(g.combat.bAtkChance == 0)
+    if(g.combat.bAtkChance == 0 || g.combat.parry == true)
     {
         g.combat.bMiss = 0;
         g.combat.bDamage = 0;
+        g.combat.parry = false;
+        FeedBossMiss(win, g);
     }
-    else
+    else if(g.combat.bAtkChance > 0 && g.combat.parry == false)
     {
         g.player.health -= g.combat.bDamage;
+        FeedBDamage(win, g);
         if(g.player.health <= 0)
         {
             g.player.alive = false;
