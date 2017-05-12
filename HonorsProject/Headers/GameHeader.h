@@ -40,6 +40,7 @@ struct Combat
     int bAtkChance = 0;
     int pDamage = 0;
     int bDamage = 0;
+    bool parry = false;
     bool pMiss = 0;
     bool bMiss = 0;
 };
@@ -87,6 +88,8 @@ void FeedSmashAttack(GraphicsWindow & w, Game & g);
 void FeedParryAttack(GraphicsWindow & w, Game & g);
 void FeedPDamage(GraphicsWindow & w, Game & g);
 void FeedBDamage(GraphicsWindow & w, Game & g);
+void FeedPlayerMiss(GraphicsWindow & w, Game & g);
+void FeedBossMiss(GraphicsWindow & w, Game & g);
 void FeedNoPotion(GraphicsWindow & w, Game & g);
 void FeedPotion(GraphicsWindow & w, Game & g, int h);
 void TextCheck(GraphicsWindow & w, Game & g);
@@ -102,8 +105,8 @@ string BossNameGen();
 void HealthPotion(GraphicsWindow & win, Game & g);
 
 //Damage Resolution
-void ResolvePDamage(Game & g);
-void ResolveBDamage(Game & g);
+void ResolvePDamage(GraphicsWindow & win, Game & g);
+void ResolveBDamage(GraphicsWindow & win, Game & g);
 
 //Player Attacks
 void SlashAttack(Game & g);
