@@ -1,0 +1,229 @@
+#include <iostream>
+#include <cctype>
+#include "lpcgraphics.h"
+
+using namespace std;
+
+//global to avoid accidental reset
+int x = 610;
+int y = 10;
+
+void PlayGame();
+string PromptPhrase();
+string HidePhrase(string p);
+void RevealString(string p, string & s, string g, int & n, GraphicsWindow & w);
+void DisplayGuess(int g, GraphicsWindow & w);
+void GuessList(string c, GraphicsWindow & w);
+void DrawBot(int n, GraphicsWindow & w);
+void DrawPhrase(string s, GraphicsWindow & w);
+string PromptGuess(string & c);
+bool GuessCheck(char g, string & c);
+
+int main()
+{
+    PlayGame();
+    return 0;
+}
+
+void PlayGame()
+{
+    string guess;
+    string phrase;
+    string sPhrase;
+    int gWrong = 8;
+    bool userWon = false;
+    string chosen = "";
+    phrase = PromptPhrase();
+    cout << 0 << endl;
+    sPhrase = HidePhrase(phrase);
+    cout << 0.5 << endl;
+    GraphicsWindow win(800, 600, "Wordbot");
+    while(gWrong > 0 && userWon == false)
+    {
+        DisplayGuess(gWrong, win);
+        DrawPhrase(sPhrase, win);
+        win.Refresh();
+        guess = PromptGuess(chosen);
+        RevealString(phrase, sPhrase, guess, gWrong, win);
+        DrawBot(gWrong, win);
+        DisplayGuess(gWrong, win);
+        DrawPhrase(sPhrase, win);
+        win.Refresh();
+        if(phrase == sPhrase)
+        {
+            userWon = true;
+        }
+    }
+    if(userWon == true)
+    {
+        cout << "========" << endl;
+        cout << "Victory!" << endl;
+        cout << "========" << endl;
+    }
+    else if(userWon == false)
+    {
+        cout << "=======" << endl;
+        cout << "Defeat." << endl;
+        cout << "=======" << endl;
+    }
+    win.WaitForKeyPress();
+}
+
+string PromptPhrase()
+{
+    string phrase;
+    cout << "Please enter a phrase for player to guess" << endl;
+    getline(cin, phrase);
+    for(int a = 0; a < phrase.length(); a++)
+    {
+        phrase[a] = toupper(phrase[a]);
+    }
+    for(int i = 0; i <= 100; i++)
+    {
+        cout << "NO CHEATING" << endl;
+    }
+    return phrase;
+}
+
+string HidePhrase(string p)
+{
+    for(int i = 0; i < p.length(); i++)
+    {
+        if(isalpha(p[i]))
+        {
+            p[i] = '-';
+        }
+    }
+    return p;
+}
+
+void DisplayGuess(int g, GraphicsWindow & w)
+{
+    w.DrawRectangle(20, 20, 300, 100, Color(0, 0, 0), true);
+    string guessString = "Remaining Guesses: ";
+    guessString += IntToString(g);
+    w.DrawString(guessString, 20, 20, Color(255, 255, 255), 24);
+}g
+
+void GuessList(string g, GraphicsWindow & w)
+{
+    w.DrawString(g, x, y, Color(255, 0 , 0), 30);
+    x += 40;
+    if (x > 790)
+    {
+        y += 50;
+        x = 610;
+    }
+    w.Refresh();
+}
+
+void DrawBot(int n, GraphicsWindow & w)
+{
+    int c = 400;
+    Color gray(173, 173, 173);
+    Color black(255, 255, 255);
+    if(n == 7)
+    {
+        w.DrawRectangle(c-50, 100, 100, 125, gray, true);
+    }
+    else if(n == 6)
+    {
+        w.DrawRectangle(c-75, 225, 150, 175, gray, true);
+    }
+    else if(n == 5)
+    {
+        w.DrawRectangle(c-115, 225, 20, 150, gray, true);
+    }
+    else if(n == 4)
+    {
+        w.DrawRectangle(c+95, 225, 20, 150, gray, true);
+    }
+    else if(n == 3)
+    {
+        w.DrawRectangle(c-75, 400, 30, 125, gray, true);
+    }
+    else if(n == 2)
+    {
+        w.DrawRectangle(c+45, 400, 30, 125, gray, true);
+    }
+    else if(n == 1)
+    {
+        w.DrawRectangle(c-25, 125, 10, 10, black, true);
+        w.DrawRectangle(c+25, 125, 10, 10, black, true);
+        w.DrawLine(c-25, 175, c+25, 175, black);
+    }
+    else if(n == 0)
+    {
+        w.DrawLine(c, 100, c, 80, gray);
+        w.DrawCircle(c, 70, 10, gray, true);
+    }
+}
+
+void RevealString(string p, string & s, string g, int & n, GraphicsWindow & w)
+{
+    bool inPhrase = false;
+    for(int i = 0; i < p.length(); i++)
+    {
+        if(g[0] == p[i])
+        {
+            s[i] = g[0];
+            inPhrase = true;
+        }
+    }
+    if(inPhrase == true)
+    {
+        cout << "The letter is in the phrase!" << endl;
+    }
+    else if(inPhrase == false)
+    {
+        cout << "The letter is NOT in the phrase!" << endl;
+        GuessList(g, w);
+        n--;
+    }
+}
+
+void DrawPhrase(string s, GraphicsWindow & w)
+{
+    w.DrawRectangle(300, 525, 500, 75, Color(0, 0, 0), true);
+    w.DrawString(s, 300, 525, Color(255, 255, 255), 50);
+}
+
+string PromptGuess(string & c)
+{
+    string guess;
+    while(true)
+    {
+        cout << "Guess a letter: " << endl;
+        cin >> guess;
+        guess[0] = toupper(guess[0]);
+        if(guess.length() != 1)
+        {
+            cout << "Invalid: Excess of characters." << endl;
+            continue;
+        }
+        else if(isalpha(guess[0]) == false)
+        {
+            cout << "Invalid: Not a letter." << endl;
+            continue;
+        }
+        else if(GuessCheck(guess[0], c) == true)
+        {
+            cout << "Invalid: Already guessed." << endl;
+            continue;
+        }
+        return guess;
+    }
+}
+
+bool GuessCheck(char g, string & c)
+{
+    for (int i = 0; i < c.length(); i++)
+    {
+        if (g == c[i])
+        {
+            return true;
+        }
+    }
+    c += g;
+    return false;
+}
