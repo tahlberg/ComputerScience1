@@ -40,6 +40,7 @@ struct Combat
     int bAtkChance = 0;
     int pDamage = 0;
     int bDamage = 0;
+    bool crit = false;
     bool parry = false;
     bool pMiss = 0;
     bool bMiss = 0;
