@@ -224,10 +224,13 @@ void ResolvePDamage(GraphicsWindow & win, Game & g)
         g.combat.pDamage = 0;
         FeedPlayerMiss(win, g);
     }
-    else if(g.combat.pAtkChance > 0 && g.combat.crit == true)
+    else if(g.combat.pAtkChance > 0)
     {
-        g.combat.pDamage += (g.combat.pDamage/4);
-        g.combat.crit = false;
+        if(g.combat.crit == true)
+        {
+            g.combat.pDamage += (g.combat.pDamage/4);
+            g.combat.crit = false;
+        }
         g.boss.health -= g.combat.pDamage;
         FeedPDamage(win, g);
         if(g.boss.health <= 0)
