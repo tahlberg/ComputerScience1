@@ -2,11 +2,12 @@ All code is subject to change.
 Project is using the LPC Graphics Library developed by Colin Schatz.
 
 Known Bugs:
-  Boss will sometimes take negative damage when player attempts to use a potion.
+    None!
   
  To-Do:
-  Add list of bosses killed along with player stats to death screen.
-  Rebalance attacks and boss
-  Save/Load game
-  Boss graphics?
-  Music?
+    Balance!
+ 
+ *Post-Release*
+    Save/Load game
+    Boss graphics?
+    Music?
