@@ -56,9 +56,12 @@ int ButtonMenu(GraphicsWindow & win)
 
 void DeathScreen(GraphicsWindow & w, Game g)
 {
+    string score = "Score: ";
+    score += IntToString(g.info.encounters - 1);
     bool retry = false;
     w.DrawRectangle(0, 0, w.GetWidth(), w.GetHeight(), Color(0, 0, 0), true);
-    w.DrawString("You Died", 275, 250, Color(255, 0, 0), 150);
+    w.DrawString(score, 400, 300, Color(255, 255, 255), 72);
+    w.DrawString("You Died", 275, 150, Color(255, 0, 0), 150);
     retry = DeathMenu(w, g);
     if(retry == true)
     {
@@ -249,7 +252,7 @@ void FeedParryAttack(GraphicsWindow & w, Game & g)
     }
     else if(g.combat.parry == false)
     {
-        w.DrawString("You failed to parry!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
+        w.DrawString("You failed to parry the attack!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
     }
     g.info.numPrint++;
 }
@@ -269,14 +272,7 @@ void FeedPDamage(GraphicsWindow & w, Game & g)
 void FeedPlayerMiss(GraphicsWindow & w, Game & g)
 {
     TextCheck(w, g);
-    if(g.combat.parry == false)
-    {
-        w.DrawString("You missed!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
-    }
-    else if(g.combat.parry == true)
-    {
-        w.DrawString("You successfully parried the attack!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
-    }
+    w.DrawString("You missed!", 10, (w.GetHeight()/5)+10+(20*g.info.numPrint), Color(255, 255, 255), 24);
     g.info.numPrint++;
 }
 
@@ -303,10 +299,10 @@ void FeedBDamage(GraphicsWindow & w, Game & g)
 //Checks if the text window is full and clears it if it is.
 void TextCheck(GraphicsWindow & w, Game & g)
 {
-    if(g.info.numPrint >= 12)
+    if(g.info.numPrint >= 15)
     {
         g.info.numPrint = 0;
-        w.DrawRectangle(0, (w.GetHeight()/5)+1, w.GetWidth(), ((w.GetHeight()/5)*2)-2, Color(0, 0, 0), true);
+        w.DrawRectangle(0, (w.GetHeight()/5)+1, w.GetWidth(), ((w.GetHeight()/5)*2)+10, Color(0, 0, 0), true);
         w.Refresh();
     }
 }
