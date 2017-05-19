@@ -1,6 +1,6 @@
 #include "GameHeader.h"
 
-//Struct that contains button information
+//Structure that contains button information
 struct Button
 {
     string name;
@@ -24,7 +24,7 @@ void MenuGraphic(GraphicsWindow & win, Game game)
     win.Refresh();
 }
 
-//Button use detection for the four attack functions
+//Button use detection for the five combat functions
 int ButtonMenu(GraphicsWindow & win)
 {
     Button stab = {"Slash", 100, ((win.GetHeight()/3)*2)+25, 200, 100, 1};
@@ -56,9 +56,9 @@ int ButtonMenu(GraphicsWindow & win)
 
 void DeathScreen(GraphicsWindow & w, Game g)
 {
-    string score = "Score: ";
-    score += IntToString(g.info.encounters - 1);
     bool retry = false;
+    string score = "Score: ";
+    score += IntToString(g.info.encounters - 2);
     w.DrawRectangle(0, 0, w.GetWidth(), w.GetHeight(), Color(0, 0, 0), true);
     w.DrawString(score, 400, 300, Color(255, 255, 255), 72);
     w.DrawString("You Died", 275, 150, Color(255, 0, 0), 150);
