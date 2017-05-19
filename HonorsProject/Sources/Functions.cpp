@@ -2,60 +2,6 @@
 
 ///Define Functions
 
-void PlayGame(GraphicsWindow & gameWindow, Game & game)
-{
-    StartGame(gameWindow, game);
-    int buttonChoice;
-    while(game.player.alive == true)
-    {
-        while(game.boss.alive == true)
-        {
-            MenuGraphic(gameWindow, game);
-            buttonChoice = ButtonMenu(gameWindow);
-            switch(buttonChoice)
-            {
-            case 1:
-                {
-                    SlashAttack(game);
-                    FeedSlashAttack(gameWindow, game);
-                }
-                break;
-            case 2:
-                {
-                    StabAttack(game);
-                    FeedStabAttack(gameWindow, game);
-                }
-                break;
-            case 3:
-                {
-                    SmashAttack(game);
-                    FeedSmashAttack(gameWindow, game);
-                }
-                break;
-            case 4:
-                {
-                    ParryAttack(game);
-                    FeedParryAttack(gameWindow, game);
-                }
-                break;
-            case 5:
-                {
-                    HealthPotion(gameWindow, game);
-                }
-                break;
-            }
-            ResolvePDamage(gameWindow, game);
-            ResolveBDamage(gameWindow, game);
-            if(game.player.alive == false)
-            {
-                break;
-            }
-        }
-        NewEncounter(gameWindow, game);
-    }
-    DeathScreen(gameWindow, game);
-}
-
 void StartGame(GraphicsWindow & win, Game & g)
 {
     g.player.totalHealth = (rand()%10) + 80;
@@ -65,8 +11,8 @@ void StartGame(GraphicsWindow & win, Game & g)
     g.player.alive = true;
     g.boss.name = BossNameGen();
     g.boss.totalHealth = (rand()%31)+100;
-    g.boss.atk = (rand()%6)+10;
-    g.boss.def = (rand())%6+10;
+    g.boss.atk = (rand()%6)+15;
+    g.boss.def = (rand())%6+15;
     g.boss.health = g.boss.totalHealth;
     g.boss.alive = true;
     g.info.numPotions = 1;
@@ -213,13 +159,14 @@ void DropPotions(GraphicsWindow & win, Game & g)
 
 void HealthPotion(GraphicsWindow & win, Game & g)
 {
+    g.combat.pAtkChance = -1;
     if(g.info.numPotions == 0)
     {
         FeedNoPotion(win, g);
     }
     else
     {
-        int healthHealed = g.player.totalHealth;
+        int healthHealed = g.player.totalHealth/2;
         g.player.health += healthHealed;
         if(g.player.health > g.player.totalHealth)
         {
@@ -256,10 +203,14 @@ void SmashAttack(Game & g)
 void ParryAttack(Game & g)
 {
     g.combat.pAtkChance = rand()%3;
-    if(g.combat.pAtkChance != 0)
+    if(g.combat.pAtkChance == 0)
     {
         g.combat.parry = true;
-        g.combat.pDamage = rand()%10+25+g.player.atk;
+        g.combat.crit = true;
+    }
+    else
+    {
+        g.combat.pAtkChance = -1;
     }
 }
 
@@ -267,14 +218,16 @@ void ParryAttack(Game & g)
 void ResolvePDamage(GraphicsWindow & win, Game & g)
 {
     g.combat.pDamage -= (g.boss.def / 2);
-    if(g.combat.pAtkChance == 0)
+    if(g.combat.pAtkChance == 0 && g.combat.parry == false)
     {
         g.combat.pMiss = true;
         g.combat.pDamage = 0;
         FeedPlayerMiss(win, g);
     }
-    else if(g.combat.pAtkChance > 0)
+    else if(g.combat.pAtkChance > 0 && g.combat.crit == true)
     {
+        g.combat.pDamage += (g.combat.pDamage/4);
+        g.combat.crit = false;
         g.boss.health -= g.combat.pDamage;
         FeedPDamage(win, g);
         if(g.boss.health <= 0)
@@ -290,12 +243,17 @@ void ResolveBDamage(GraphicsWindow & win, Game & g)
     g.combat.bAtkChance = rand()%8;
     g.combat.bDamage = rand()%10+g.boss.atk;
     g.combat.bDamage -= (g.player.def / 2);
-    if(g.combat.bAtkChance == 0 || g.combat.parry == true)
+    if(g.combat.bAtkChance == 0)
+    {
+        g.combat.bMiss = 0;
+        g.combat.bDamage = 0;
+        FeedBossMiss(win, g);
+    }
+    else if(g.combat.parry == true)
     {
         g.combat.bMiss = 0;
         g.combat.bDamage = 0;
         g.combat.parry = false;
-        FeedBossMiss(win, g);
     }
     else if(g.combat.bAtkChance > 0 && g.combat.parry == false)
     {
