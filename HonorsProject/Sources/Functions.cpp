@@ -202,8 +202,8 @@ void SmashAttack(Game & g)
 //Blocks nex8t boss attack - WIP
 void ParryAttack(Game & g)
 {
-    g.combat.pAtkChance = rand()%3;
-    if(g.combat.pAtkChance == 0)
+    g.combat.pAtkChance = rand()%5;
+    if(g.combat.pAtkChance < 2)
     {
         g.combat.parry = true;
         g.combat.crit = true;
@@ -218,7 +218,7 @@ void ParryAttack(Game & g)
 void ResolvePDamage(GraphicsWindow & win, Game & g)
 {
     g.combat.pDamage -= (g.boss.def / 2);
-    if(g.combat.crit = true)
+    if(g.combat.crit == true)
     {
         g.combat.pAtkChance == 1;
     }
