@@ -1,0 +1,78 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<string> DivideIntoWords(string line);
+string ProcessOneWord(vector<string> & w);
+string ProcessAll(vector<string> w);
+
+int main()
+{
+    string phrase;
+    cout << "Enter a sentence (type STOP to stop): " << endl;
+    getline(cin, phrase);
+    while(phrase != "STOP")
+    {
+        vector<string> strWords = DivideIntoWords(phrase);
+        cout << ProcessAll(strWords) << endl;
+        cout << "Enter a sentence (type STOP to stop): " << endl;
+        getline(cin, phrase);
+    }
+}
+
+vector<string> DivideIntoWords(string line)
+{
+    vector<string> words;
+    string word;
+    for(int i = 0; i < line.length(); i++)
+    {
+        if(line[i] == ' ')
+        {
+            words.push_back(word);
+            word = "";
+            continue;
+        }
+        word += line[i];
+    }
+    words.push_back(word);
+    return words;
+}
+
+string ProcessOneWord(string w)
+{
+    string word = "";
+    if(w[0] == 'A' || w[0] == 'a' && w[1] == 't')
+    {
+        word += '@';
+        for(int i = 2; i < w.length(); i++)
+        {
+            word += w[i];
+        }
+    }
+    else
+    {
+        for(int n = 0; n < w.length(); n++)
+        {
+            if(w[n] != 'a' && w[n] != 'e' && w[n] != 'i' && w[n] != 'o' && w[n] != 'u')
+            {
+                word += w[n];
+            }
+        }
+    }
+    return word;
+}
+
+string ProcessAll(vector<string> words)
+{
+    string phrase;
+    for(int i = 0; i < words.size(); i++)
+    {
+        if(i != 0)
+        {
+            phrase += " ";
+        }
+        phrase += ProcessOneWord(words[i]);
+    }
+    return phrase;
+}
